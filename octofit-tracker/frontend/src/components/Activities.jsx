@@ -1,18 +1,19 @@
 import { useEffect, useState } from 'react'
-import { fetchCollection } from '../api.js'
+import { codespaceName, fetchCollection } from '../api.js'
 import { CollectionState } from './CollectionState.jsx'
 import { getLabel } from './utils.js'
 
 function Activities() {
+  const activitiesEndpoint = codespaceName ? `https://${codespaceName}-8000.app.github.dev/api/activities` : 'http://localhost:8000/api/activities/'
   const [activities, setActivities] = useState([])
   const [state, setState] = useState({ loading: true, error: '' })
 
   useEffect(() => {
-    fetchCollection('activities')
+    fetchCollection('activities', activitiesEndpoint)
       .then((items) => setActivities(items))
       .catch((error) => setState({ loading: false, error: error.message }))
       .finally(() => setState((current) => ({ ...current, loading: false })))
-  }, [])
+  }, [activitiesEndpoint])
 
   return (
     <section className="view-section">
